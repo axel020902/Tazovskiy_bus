@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Такси межгород Тазовский. Надым. Тарко-Сале. — заказ онлайн</title>
+    <meta
+      name="description"
+      content="Такси межгород Тазовский. Надым. Тарко-Сале.: быстрая подача, комфортные поездки по городу и области. Онлайн-заявка и контакты."
+    />
+    <style>
+      :root {
+        --bg: #0b1020;
+        --card: rgba(255, 255, 255, 0.08);
+        --card2: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.14);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --accent: #ffd24a;
+        --accent2: #5ae3ff;
+        --danger: #ff6b6b;
+        --ok: #2ee59d;
+        --radius: 16px;
+        --max: 1100px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+          Arial, "Noto Sans", "Liberation Sans", sans-serif;
+        color: var(--text);
+        background: radial-gradient(
+            1100px 700px at 15% 10%,
+            rgba(90, 227, 255, 0.18),
+            transparent 55%
+          ),
+          radial-gradient(
+            1000px 700px at 90% 15%,
+            rgba(255, 210, 74, 0.18),
+            transparent 55%
+          ),
+          linear-gradient(180deg, #0b1020, #070b16);
+      }
+      section[id] {
+        scroll-margin-top: 80px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      
+      /* Анимации появления */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          box-shadow: 0 10px 24px rgba(255, 210, 74, 0.25);
+        }
+        50% {
+          box-shadow: 0 10px 34px rgba(255, 210, 74, 0.4);
+        }
+      }
+      
+      /* Применение анимаций */
+      .top {
+        animation: fadeIn 0.6s ease-out;
+      }
+      
+      .hero > *:first-child {
+        animation: slideInLeft 0.8s ease-out 0.2s both;
+      }
+      
+      .hero > *:last-child {
+        animation: slideInRight 0.8s ease-out 0.3s both;
+      }
+      
+      .card {
+        animation: fadeInUp 0.6s ease-out both;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+      
+      .mini {
+        animation: scaleIn 0.5s ease-out both;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .mini:nth-child(1) { animation-delay: 0.1s; }
+      .mini:nth-child(2) { animation-delay: 0.2s; }
+      .mini:nth-child(3) { animation-delay: 0.3s; }
+      
+      .mini:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+      
+      .pill {
+        animation: fadeIn 0.5s ease-out both;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      
+      .pill:nth-child(1) { animation-delay: 0.4s; }
+      .pill:nth-child(2) { animation-delay: 0.5s; }
+      .pill:nth-child(3) { animation-delay: 0.6s; }
+      
+      .pill:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      
+      input, textarea, select {
+        transition: all 0.3s ease;
+      }
+      
+      input:hover, textarea:hover, select:hover {
+        border-color: rgba(255, 255, 255, 0.28);
+        background: rgba(0, 0, 0, 0.3);
+      }
+      
+      .footer {
+        animation: fadeInUp 0.8s ease-out 0.5s both;
+      }
+      
+      /* Анимация при скролле */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      
+      .animate-on-scroll.animated {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .container {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 18px 16px 48px;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 12px;
+        z-index: 5;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        animation: scaleIn 0.5s ease-out;
+        transition: transform 0.3s ease;
+      }
+      
+      .logo:hover {
+        transform: rotate(5deg) scale(1.05);
+      }
+      .brand strong {
+        display: block;
+        font-size: 0.98rem;
+        letter-spacing: 0.01em;
+        line-height: 1.1;
+      }
+      .brand span {
+        display: block;
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.1;
+      }
+      .nav {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .nav a {
+        padding: 8px 10px;
+        border-radius: 999px;
+        color: var(--muted);
+        border: 1px solid transparent;
+        transition:
+          background 150ms ease,
+          color 150ms ease,
+          border-color 150ms ease,
+          transform 140ms ease;
+      }
+      .nav a:hover {
+        border-color: rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        transform: translateY(-1px);
+      }
+      .btn {
+        border: 0;
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-weight: 650;
+        letter-spacing: 0.01em;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        user-select: none;
+        transition:
+          background 160ms ease,
+          color 160ms ease,
+          box-shadow 160ms ease,
+          transform 140ms ease,
+          border-color 160ms ease;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), #ffe58a);
+        color: #1a1a1a;
+        box-shadow: 0 10px 24px rgba(255, 210, 74, 0.25);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px) scale(1.05);
+        box-shadow: 0 16px 34px rgba(255, 210, 74, 0.32);
+        background: linear-gradient(135deg, #ffe58a, #fff1b8);
+        animation: none;
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.28);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+      }
+      .btn:active {
+        transform: translateY(1px);
+        box-shadow: none;
+      }
+      .hero {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 16px;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.04)
+        );
+        padding: 18px;
+      }
+      h1 {
+        margin: 6px 0 10px;
+        font-size: clamp(1.8rem, 3.1vw, 2.7rem);
+        line-height: 1.08;
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+      
+      h2 {
+        animation: fadeInUp 0.6s ease-out both;
+      }
+      .lead {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 56ch;
+        animation: fadeInUp 0.8s ease-out 0.4s both;
+      }
+      .pillrow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+        animation: fadeInUp 0.8s ease-out 0.5s both;
+      }
+      .pill {
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .pill b {
+        color: var(--text);
+      }
+      .cta {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        animation: fadeInUp 0.8s ease-out 0.7s both;
+      }
+      
+      img {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+      .note {
+        margin-top: 10px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.92rem;
+        animation: fadeIn 1s ease-out 0.8s both;
+      }
+      .grid {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .mini {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 14px;
+      }
+      .mini strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+      .mini p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.35;
+      }
+      .section {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .section h2 {
+        margin: 0 0 10px;
+        font-size: 1.25rem;
+      }
+      .list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      
+      .list li {
+        transition: color 0.2s ease, transform 0.2s ease;
+      }
+      
+      .list li:hover {
+        color: var(--text);
+        transform: translateX(3px);
+      }
+      .form {
+        display: grid;
+        gap: 10px;
+      }
+      label {
+        display: grid;
+        gap: 6px;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(0, 0, 0, 0.24);
+        color: var(--text);
+        outline: none;
+        font: inherit;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: rgba(90, 227, 255, 0.55);
+        box-shadow: 0 0 0 4px rgba(90, 227, 255, 0.12);
+        transform: translateY(-1px);
+        background: rgba(0, 0, 0, 0.35);
+      }
+
+      /* Дополнительное оформление для выпадающих списков и даты/времени */
+      .form select,
+      .form input[type="datetime-local"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        color-scheme: dark;
+        padding-right: 34px;
+        border-radius: 14px;
+        background-image: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.16),
+            rgba(255, 255, 255, 0.02)
+          ),
+          url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10L12 15L17 10' stroke='%23FFE58A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center, right 10px center;
+        background-size: auto, 14px;
+        cursor: pointer;
+      }
+
+      .form select:hover,
+      .form input[type="datetime-local"]:hover {
+        border-color: rgba(255, 255, 255, 0.32);
+      }
+
+      textarea {
+        min-height: 92px;
+        resize: vertical;
+      }
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .help {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 0.9rem;
+        line-height: 1.35;
+      }
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+      
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      .error {
+        display: none;
+        color: #1a1a1a;
+        background: rgba(255, 107, 107, 0.95);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-weight: 650;
+        animation: shake 0.4s ease-out, bounceIn 0.4s ease-out;
+      }
+      .ok {
+        display: none;
+        color: #082016;
+        background: rgba(46, 229, 157, 0.92);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-weight: 650;
+        animation: bounceIn 0.5s ease-out;
+      }
+      .footer {
+        margin-top: 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+        padding-top: 14px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 12px;
+        color: var(--muted);
+      }
+      .contacts {
+        display: grid;
+        gap: 8px;
+      }
+      .contact-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .contact-row a {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.06);
+        padding: 8px 10px;
+        border-radius: 999px;
+        transition:
+          background 150ms ease,
+          border-color 150ms ease,
+          transform 140ms ease,
+          box-shadow 150ms ease;
+        animation: fadeIn 0.5s ease-out both;
+      }
+      
+      .contact-row a:nth-child(1) { animation-delay: 0.6s; }
+      .contact-row a:nth-child(2) { animation-delay: 0.7s; }
+      .contact-row a:nth-child(3) { animation-delay: 0.8s; }
+      .contact-row a:nth-child(4) { animation-delay: 0.9s; }
+      
+      .contact-row a:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.24);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+      }
+      
+      .contact-row a:active {
+        transform: translateY(0) scale(0.98);
+      }
+      @media (max-width: 980px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .section {
+          grid-template-columns: 1fr;
+        }
+        .footer {
+          grid-template-columns: 1fr;
+        }
+        .nav {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="top" aria-label="Навигация">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <strong>Такси межгород Тазовский. Надым. Тарко-Сале.</strong>
+            <span>Заказ по городу и области</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Разделы">
+          <a href="#services">Услуги</a>
+          <a href="#order">Заказать</a>
+          <a href="#prices">Тарифы</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+        <div style="display: flex; gap: 10px; align-items: center">
+          <a class="btn btn-ghost" href="tel:+79821686030" aria-label="Позвонить">
+            Позвонить
+          </a>
+          <a class="btn btn-primary" href="#order">Заказать</a>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-label="Главный экран">
+          <div class="card">
+            <h1>Такси без ожиданий и лишних разговоров</h1>
+            <p class="lead">
+              Укажите адреса и время — мы перезвоним/напишем для подтверждения и
+              подадим машину. Комфорт, безопасность, честный сервис.
+            </p>
+            <div class="pillrow">
+              <div class="pill"><b>Подача</b> от 5–10 минут</div>
+              <div class="pill"><b>24/7</b> по городу</div>
+              <div class="pill"><b>Межгород</b> по области</div>
+            </div>
+            <div class="cta">
+              <a class="btn btn-primary" href="#order">Оставить заявку</a>
+              <a class="btn btn-ghost" href="#prices">Посмотреть тарифы</a>
+            </div>
+            <p class="note">
+              Примечание: на сайте — заявка. Для срочного заказа лучше звонить.
+            </p>
+          </div>
+
+          <aside class="card" id="services" aria-label="Услуги">
+            <h2>Что мы делаем</h2>
+            <div class="grid">
+              <div class="mini">
+                <strong>По городу</strong>
+                <p>Быстрые поездки по ЯНАО: дом–работа, дела, гости.</p>
+              </div>
+              <div class="mini">
+                <strong>Аэропорт / вокзал</strong>
+                <p>Встреча и проводы, можно с багажом и детским креслом.</p>
+              </div>
+              <div class="mini">
+                <strong>Межгород</strong>
+                <p>По области и соседним городам — заранее по времени.</p>
+              </div>
+            </div>
+            <div class="grid" style="margin-top: 10px">
+              <div class="mini" style="grid-column: 1 / -1">
+                <p>
+                  Автопарк нашей организации состоит из Hyundai Starex H1, VW
+                  Transporter и легковых автомобилей.
+                </p>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section" id="order" aria-label="Форма заказа">
+          <div class="card">
+            <h2>Онлайн-заявка</h2>
+            <p class="help">
+              Заполните данные. Мы свяжемся, уточним детали и подтвердим заказ.
+            </p>
+
+            <div class="error" id="formError" role="alert"></div>
+            <div class="ok" id="formOk" role="status"></div>
+
+            <form class="form" id="orderForm" autocomplete="on">
+              <div class="row2">
+                <label>
+                  Телефон *
+                  <input
+                    name="phone"
+                    inputmode="tel"
+                    placeholder="+7 (___) ___-__-__"
+                    required
+                  />
+                </label>
+                <label>
+                  Как связаться
+                  <select name="channel">
+                    <option value="call" selected>Звонок</option>
+                    <option value="tg">Telegram</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                Откуда *
+                <input
+                  name="from"
+                  placeholder="Город, улица, дом, подъезд"
+                  required
+                />
+              </label>
+              <label>
+                Куда *
+                <input
+                  name="to"
+                  placeholder="Город, улица, дом, подъезд"
+                  required
+                />
+              </label>
+
+              <div class="row2">
+                <label>
+                  Дата и время
+                  <input name="when" type="datetime-local" />
+                </label>
+                <label>
+                  Тариф
+                  <select name="tariff">
+                    <option value="economy" selected>Эконом</option>
+                    <option value="comfort">Комфорт</option>
+                    <option value="minivan">Минивэн</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                Комментарий
+                <textarea
+                  name="comment"
+                  placeholder="Подъезд, домофон, детское кресло, багаж и т. п."
+                ></textarea>
+              </label>
+
+              <button class="btn btn-primary" type="submit">Отправить</button>
+              <p class="help" style="margin-top: 2px">
+                Нажимая «Отправить», вы соглашаетесь на обработку заявки для
+                обратной связи.
+              </p>
+            </form>
+          </div>
+
+          <div class="card" id="prices" aria-label="Тарифы и преимущества">
+            <h2>Тарифы (пример)</h2>
+            <ul class="list">
+              <li>Эконом — для быстрых поездок по городу.</li>
+              <li>Комфорт — просторнее и тише, удобен для дальних поездок.</li>
+              <li>Минивэн — для компании/багажа (по запросу).</li>
+            </ul>
+            <h2 style="margin-top: 14px">Почему удобно</h2>
+            <ul class="list">
+              <li>Чёткое подтверждение заказа: звонок/сообщение.</li>
+              <li>Можно заранее: на нужное время и дату.</li>
+              <li>Комментарий к заказу — всё фиксируется в заявке.</li>
+            </ul>
+            <img src="card.jpg" alt="Карточка" style="width: 100%; max-width: 100%; margin-top: 14px; border-radius: 12px;">
+          </div>
+        </section>
+
+        <footer class="footer" id="contacts" aria-label="Контакты">
+          <div class="contacts">
+            <strong style="color: var(--text)">Контакты</strong>
+            <div class="contact-row">
+              <a href="tel:+79821686030">+7 (982) 168-60-30</a>
+              <a href="tel:+79088521440">+7 (908) 852-14-40</a>
+              <a href="tel:+79222874848">+7 (922) 287-48-48</a>
+              <a href="tel:+79044581518">+7 (904) 458-15-18</a>
+            </div>
+            <div class="contact-row">
+              <a href="#" id="tgLink">Telegram</a>
+              <a href="#" id="vkLink">VK</a>
+            </div>
+          </div>
+          <div style="text-align: right">
+            <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.92rem">
+              © <span id="year"></span> Такси межгород Тазовский. Надым. Тарко-Сале.
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        // Прокрутка страницы вверх при загрузке/обновлении
+        window.history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+
+        const $ = (sel) => document.querySelector(sel);
+
+        const year = $("#year");
+        if (year) year.textContent = String(new Date().getFullYear());
+
+        // Плавный скролл к разделам с центрированием
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || !href) return;
+            
+            const target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              const headerHeight = 70;
+              const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+              const offsetPosition = targetPosition - headerHeight;
+
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
+          });
+        });
+
+        // Анимация элементов при скролле
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animated');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        // Добавляем класс для анимации к элементам секций
+        document.querySelectorAll('.section .card, .section .mini').forEach(el => {
+          el.classList.add('animate-on-scroll');
+          observer.observe(el);
+        });
+
+        // Заполните реальными ссылками (или удалите кнопки)
+        const LINKS = {
+          telegram: "https://t.me/+XkKSSpBc_tY3Zjhi",
+          vk: "https://vk.com/taxi_tazovskiy",
+        };
+        const tg = $("#tgLink");
+        const vk = $("#vkLink");
+        if (tg) tg.href = LINKS.telegram;
+        if (vk) vk.href = LINKS.vk;
+
+        const form = $("#orderForm");
+        const err = $("#formError");
+        const ok = $("#formOk");
+
+        function show(el, text) {
+          if (!el) return;
+          el.textContent = text;
+          el.style.display = "block";
+        }
+        function hide(el) {
+          if (!el) return;
+          el.style.display = "none";
+          el.textContent = "";
+        }
+
+        function normalizePhone(raw) {
+          const digits = String(raw || "").replace(/\D/g, "");
+          // допускаем: 8XXXXXXXXXX или 7XXXXXXXXXX или просто 10 цифр
+          if (digits.length === 11 && digits.startsWith("8"))
+            return "7" + digits.slice(1);
+          if (digits.length === 11 && digits.startsWith("7")) return digits;
+          if (digits.length === 10) return "7" + digits;
+          return "";
+        }
+
+        function getFormData(f) {
+          const fd = new FormData(f);
+          return Object.fromEntries(fd.entries());
+        }
+
+        if (form) {
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            hide(err);
+            hide(ok);
+
+            const data = getFormData(form);
+            const phone = normalizePhone(data.phone);
+
+            if (!phone) {
+              show(err, "Введите корректный телефон (10–11 цифр).");
+              return;
+            }
+            if (!String(data.from || "").trim()) {
+              show(err, "Заполните поле «Откуда».");
+              return;
+            }
+            if (!String(data.to || "").trim()) {
+              show(err, "Заполните поле «Куда».");
+              return;
+            }
+
+            // Формируем текст заявки
+            const lines = [
+              "Заявка на такси:",
+              `Телефон: +${phone}`,
+              `Связь: ${data.channel || "call"}`,
+              `Откуда: ${String(data.from).trim()}`,
+              `Куда: ${String(data.to).trim()}`,
+              `Когда: ${data.when ? data.when : "как можно скорее"}`,
+              `Тариф: ${data.tariff || "economy"}`,
+              `Комментарий: ${String(data.comment || "").trim() || "—"}`,
+            ];
+            const message = lines.join("\n");
+
+            // Копируем в буфер обмена
+            const done = () => {
+              show(
+                ok,
+                "Готово! Текст заявки сформирован. Мы свяжемся с вами для подтверждения."
+              );
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard
+                .writeText(message)
+                .then(done)
+                .catch(() => {
+                  show(
+                    ok,
+                    "Готово! (Буфер обмена недоступен в этом браузере — текст заявки покажем ниже.)"
+                  );
+                  alert(message);
+                });
+            } else {
+              alert(message);
+              done();
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
+
