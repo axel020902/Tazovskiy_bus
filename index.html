@@ -464,6 +464,8 @@
       /* Стили для автодополнения адресов */
       .address-suggestions {
         position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
         z-index: 1000;
         width: 100%;
         max-height: 300px;
@@ -471,7 +473,6 @@
         background: rgba(15, 20, 35, 0.98);
         border: 1px solid rgba(90, 227, 255, 0.3);
         border-radius: 12px;
-        margin-top: 4px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
         display: none;
       }
