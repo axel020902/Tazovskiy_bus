@@ -912,42 +912,85 @@
               return;
             }
 
-            // Формируем текст заявки
-            const lines = [
-              "Заявка на такси:",
-              `Телефон: +${phone}`,
-              `Связь: ${data.channel || "call"}`,
-              `Откуда: ${String(data.from).trim()}`,
-              `Куда: ${String(data.to).trim()}`,
-              `Когда: ${data.when ? data.when : "как можно скорее"}`,
-              `Тариф: ${data.tariff || "economy"}`,
-              `Комментарий: ${String(data.comment || "").trim() || "—"}`,
-            ];
-            const message = lines.join("\n");
-
-            // Копируем в буфер обмена
-            const done = () => {
-              show(
-                ok,
-                "Готово! Текст заявки сформирован. Мы свяжемся с вами для подтверждения."
-              );
+            // Формируем текст заявки для Telegram
+            const channelNames = {
+              call: "Звонок",
+              tg: "Telegram",
+            };
+            
+            const tariffNames = {
+              economy: "Эконом",
+              comfort: "Комфорт",
+              minivan: "Минивэн"
             };
 
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard
-                .writeText(message)
-                .then(done)
-                .catch(() => {
-                  show(
-                    ok,
-                    "Готово! (Буфер обмена недоступен в этом браузере — текст заявки покажем ниже.)"
-                  );
-                  alert(message);
-                });
-            } else {
-              alert(message);
-              done();
+            const lines = [
+              "🚕 <b>Новая заявка на такси</b>",
+              "",
+              `📱 <b>Телефон:</b> +${phone}`,
+              `💬 <b>Связь:</b> ${channelNames[data.channel] || data.channel}`,
+              `📍 <b>Откуда:</b> ${String(data.from).trim()}`,
+              `📍 <b>Куда:</b> ${String(data.to).trim()}`,
+              `🕐 <b>Когда:</b> ${data.when ? new Date(data.when).toLocaleString('ru-RU', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+              }) : "как можно скорее"}`,
+              `🚗 <b>Тариф:</b> ${tariffNames[data.tariff] || data.tariff}`,
+            ];
+            
+            if (String(data.comment || "").trim()) {
+              lines.push(`💭 <b>Комментарий:</b> ${String(data.comment).trim()}`);
             }
+
+            const message = lines.join("\n");
+            
+            // Telegram Bot API
+            const botToken = "8319773181:AAHwZRAc-o4sqYll3OXdAkbf0z4FKAmfztk";
+            const chatIds = ["7917023019", "404492289"];
+            
+            // Отправка в Telegram
+            const sendToTelegram = async () => {
+              try {
+                const promises = chatIds.map(chatId => 
+                  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      chat_id: chatId,
+                      text: message,
+                      parse_mode: 'HTML'
+                    })
+                  })
+                );
+                
+                await Promise.all(promises);
+                
+                show(
+                  ok,
+                  "✅ Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время."
+                );
+                
+                // Очищаем форму после успешной отправки
+                setTimeout(() => {
+                  form.reset();
+                  hide(ok);
+                }, 3000);
+                
+              } catch (error) {
+                show(
+                  err,
+                  "❌ Ошибка отправки. Пожалуйста, позвоните нам напрямую: +7 (982) 168-60-30"
+                );
+                console.error('Ошибка отправки в Telegram:', error);
+              }
+            };
+            
+            sendToTelegram();
           });
         }
       })();
