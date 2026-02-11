@@ -460,6 +460,57 @@
         transform: translateY(-1px);
         background: rgba(0, 0, 0, 0.35);
       }
+      
+      /* Стили для автодополнения адресов */
+      .address-suggestions {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        background: rgba(15, 20, 35, 0.98);
+        border: 1px solid rgba(90, 227, 255, 0.3);
+        border-radius: 12px;
+        margin-top: 4px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        display: none;
+      }
+      
+      .address-suggestions.active {
+        display: block;
+        animation: fadeInUp 0.2s ease-out;
+      }
+      
+      .suggestion-item {
+        padding: 12px 14px;
+        cursor: pointer;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+      
+      .suggestion-item:last-child {
+        border-bottom: none;
+      }
+      
+      .suggestion-item:hover {
+        background: rgba(90, 227, 255, 0.15);
+        transform: translateX(3px);
+      }
+      
+      .suggestion-main {
+        color: var(--text);
+        font-size: 0.95rem;
+        margin-bottom: 3px;
+      }
+      
+      .suggestion-sub {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      
+      label {
+        position: relative;
+      }
 
       /* Дополнительное оформление для выпадающих списков и даты/времени */
       .form select,
@@ -849,6 +900,136 @@
           el.classList.add('animate-on-scroll');
           observer.observe(el);
         });
+
+        // DaData автодополнение адресов
+        const DADATA_TOKEN = "8fa6c9bf4ea101d9d64c02cd4788922c5d06ace5";
+        const DADATA_URL = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
+
+        function createSuggestionsContainer(input) {
+          const container = document.createElement('div');
+          container.className = 'address-suggestions';
+          input.parentElement.style.position = 'relative';
+          input.parentElement.appendChild(container);
+          return container;
+        }
+
+        async function fetchAddressSuggestions(query) {
+          if (!query || query.length < 2) return [];
+          
+          try {
+            const response = await fetch(DADATA_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Token ' + DADATA_TOKEN
+              },
+              body: JSON.stringify({ 
+                query: query,
+                count: 7
+              })
+            });
+            
+            const data = await response.json();
+            return data.suggestions || [];
+          } catch (error) {
+            console.error('Ошибка DaData:', error);
+            return [];
+          }
+        }
+
+        function setupAddressAutocomplete(input) {
+          const suggestionsContainer = createSuggestionsContainer(input);
+          let debounceTimer;
+          let currentFocus = -1;
+
+          input.addEventListener('input', async function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+              suggestionsContainer.classList.remove('active');
+              return;
+            }
+
+            debounceTimer = setTimeout(async () => {
+              const suggestions = await fetchAddressSuggestions(query);
+              
+              if (suggestions.length === 0) {
+                suggestionsContainer.classList.remove('active');
+                return;
+              }
+
+              suggestionsContainer.innerHTML = suggestions.map((item, index) => `
+                <div class="suggestion-item" data-index="${index}" data-value="${item.value}">
+                  <div class="suggestion-main">${item.value}</div>
+                  ${item.data.postal_code ? `<div class="suggestion-sub">Индекс: ${item.data.postal_code}</div>` : ''}
+                </div>
+              `).join('');
+
+              suggestionsContainer.classList.add('active');
+
+              // Обработка кликов по подсказкам
+              suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
+                item.addEventListener('click', function() {
+                  input.value = this.getAttribute('data-value');
+                  suggestionsContainer.classList.remove('active');
+                  input.focus();
+                });
+              });
+            }, 300);
+          });
+
+          // Закрытие при клике вне поля
+          document.addEventListener('click', function(e) {
+            if (e.target !== input && !suggestionsContainer.contains(e.target)) {
+              suggestionsContainer.classList.remove('active');
+            }
+          });
+
+          // Навигация клавишами
+          input.addEventListener('keydown', function(e) {
+            const items = suggestionsContainer.querySelectorAll('.suggestion-item');
+            if (items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              currentFocus++;
+              if (currentFocus >= items.length) currentFocus = 0;
+              setActive(items);
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              currentFocus--;
+              if (currentFocus < 0) currentFocus = items.length - 1;
+              setActive(items);
+            } else if (e.key === 'Enter') {
+              e.preventDefault();
+              if (currentFocus > -1 && items[currentFocus]) {
+                items[currentFocus].click();
+              }
+            } else if (e.key === 'Escape') {
+              suggestionsContainer.classList.remove('active');
+              currentFocus = -1;
+            }
+          });
+
+          function setActive(items) {
+            items.forEach((item, index) => {
+              if (index === currentFocus) {
+                item.style.background = 'rgba(90, 227, 255, 0.15)';
+              } else {
+                item.style.background = '';
+              }
+            });
+          }
+        }
+
+        // Инициализация автодополнения для полей адресов
+        const fromInput = document.querySelector('input[name="from"]');
+        const toInput = document.querySelector('input[name="to"]');
+        
+        if (fromInput) setupAddressAutocomplete(fromInput);
+        if (toInput) setupAddressAutocomplete(toInput);
 
         // Заполните реальными ссылками (или удалите кнопки)
         const LINKS = {
